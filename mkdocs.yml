@@ -1,1 +1,9 @@
 site_name: My Docs
+
+site_url: https://stawo.github.io/
+
+plugins:
+  - blogging:
+      locale: en-US
+      dirs: # The directories to be included
+        - articles
