@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          
+
       - name: Deploy docs
         uses: mhausenblas/mkdocs-deploy-gh-pages@master
         # Or use mhausenblas/mkdocs-deploy-gh-pages@nomaterial to build without the mkdocs-material theme
@@ -23,4 +23,4 @@ jobs:
           # CONFIG_FILE: folder/mkdocs.yml
           # EXTRA_PACKAGES: build-base
           # GITHUB_DOMAIN: github.myenterprise.com
-          # REQUIREMENTS: folder/requirements.txt
+          REQUIREMENTS: requirements.txt
