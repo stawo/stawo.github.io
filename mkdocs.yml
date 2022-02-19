@@ -1,8 +1,9 @@
-site_name: My Docs
+site_name: Dev Shards
 
 site_url: https://stawo.github.io/
 
 plugins:
+  - search
   - blogging:
-      dirs: # The directories to be included
-        - articles
+    dirs:
+      - articles

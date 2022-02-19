@@ -3,7 +3,7 @@ title: GitHub Pages + MkDocs + GitHub Actions = The lazy Dev dream for publishin
 description: How I created this website.
 ---
 
-# "Hello MkDocs!" website
+## "Hello MkDocs!" website
 
 - create empty repo `{git username}.github.io`
   For example, in my case it's `stawo.github.io`
@@ -41,7 +41,7 @@ description: How I created this website.
 
         - name: Deploy docs
             uses: mhausenblas/mkdocs-deploy-gh-pages@master
-            # Or use mhausenblas/mkdocs-deploy-gh-pages@nomaterial to build without the mkdocs-material theme
+            ## Or use mhausenblas/mkdocs-deploy-gh-pages@nomaterial to build without the mkdocs-material theme
             env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     ```
@@ -54,11 +54,44 @@ description: How I created this website.
   For example, in my case it's `https://stawo.github.io/`.  
   **Note**: it takes a little bit of time for GitHub to pick up changes, so don't worry if you get an error, just retry to refresh the page.
 
+Resources:
+- https://www.mkdocs.org/
+- https://github.com/marketplace/actions/deploy-mkdocs
+- 
 
-# Power-up: Write first content
+## Power-up: Blog!
 
-# Power-up: customize theme
+https://liang2kl.github.io/mkdocs-blogging-plugin/
 
-# Power-up: Blog!
+- install plugin  
+  ```
+  pip install mkdocs-blogging-plugin
+  ```
+- set up plugin  
+  `mkdocs.yml` should look like this:  
+  ```
+  site_name: My Docs
+  
+  site_url: https://stawo.github.io/
 
-# Power-up: add linter
+  plugins:
+    - search
+    - blogging:
+      dirs:
+        - articles
+  ```
+  - re-eable search bar
+    https://squidfunk.github.io/mkdocs-material/setup/setting-up-site-search/#built-in-search
+- create folder
+- fix cicd
+  - create file `requirements.txt` and add the line:  
+    ```
+    mkdocs-blogging-plugin
+    ```
+  - modify `build_site.yml`
+
+## Power-up: Write first content
+
+## Power-up: customize theme
+
+## Power-up: add linter
