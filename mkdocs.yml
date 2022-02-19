@@ -5,5 +5,5 @@ site_url: https://stawo.github.io/
 plugins:
   - search
   - blogging:
-    dirs:
-      - articles
+      dirs:
+        - articles
