@@ -11,7 +11,7 @@ description: How I created this website.
 - from the web interface, create the file `.gitignore`, just add a space in it (otherwise you cannot save it), and commit it.  
   This step is useful to initiate the repo and avoid having to do it locally on the computer later on.
 - (optional, but strongly suggested) create conda env with `mkdocs` installed and activate it  
-  `conda create --name stawo.github.io python=3.10 mkdocs`
+  `conda create --name stawo.github.io python=3.10 mkdocs-material`
   `conda activate stawo.github.io`
   - if you don't have/want `conda`, just run `pip install mkdocs`
 - clone repo on computer and access repo root folder.
@@ -55,6 +55,7 @@ description: How I created this website.
   **Note**: it takes a little bit of time for GitHub to pick up changes, so don't worry if you get an error, just retry to refresh the page.
 
 Resources:
+- https://squidfunk.github.io/mkdocs-material
 - https://www.mkdocs.org/
 - https://github.com/marketplace/actions/deploy-mkdocs
 - 
@@ -93,5 +94,8 @@ https://liang2kl.github.io/mkdocs-blogging-plugin/
 ## Power-up: Write first content
 
 ## Power-up: customize theme
+
+Resources:
+- https://squidfunk.github.io/mkdocs-material/
 
 ## Power-up: add linter
