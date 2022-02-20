@@ -4,14 +4,23 @@ site_url: https://stawo.github.io/
 
 theme:
   name: material
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
 
 plugins:
   - search
   - blogging:
       dirs:
         - articles
+      features:
+        tags: {}
+      theme:
+        name: card
 
 markdown_extensions:
+  - meta
   - pymdownx.emoji:
-    emoji_index: !!python/name:materialx.emoji.twemoji
-    emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg

@@ -1,3 +1,0 @@
-# Articles
-
-{{ blog_content }}

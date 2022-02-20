@@ -1,6 +1,9 @@
 ---
 title: My lazy Dev dream for publishing!
 description: my_site = {"GitHub Pages", "MkDocs Material", "GitHub Actions"}
+tags:
+  - blog
+  - mkdocs
 ---
 
 ## Introduction
@@ -31,7 +34,7 @@ These are the steps I followed to have a working website with automatic updates 
 Create an empty repository named `{git username}.github.io`.  
 For example, in my case it's `stawo.github.io`.
 
-![Empty Repo](docs/../../images/2022-02-19-Github_pages_website_tutorial-Create_repo.jpg)
+![Empty Repo](docs/../../images/2022-02-19-Github_pages_website_tutorial/2022-02-19-Github_pages_website_tutorial-Create_repo.jpg)
 
 From the web interface, create the file `.gitignore`, just add a space in it (otherwise you cannot save it), and commit it.  
 This step is useful to initiate the repo and avoid having to do it locally on the computer later on.
@@ -66,7 +69,7 @@ mkdocs serve
 ```
 
 This should give the following website at the address http://127.0.0.1:8000/
-![MkDocs empty site](docs/../../images/2022-02-19-Github_pages_website_tutorial-Default_mkdocs_website.jpg)
+![MkDocs empty site](docs/../../images/2022-02-19-Github_pages_website_tutorial/2022-02-19-Github_pages_website_tutorial-Default_mkdocs_website.jpg)
 
 Build the website by running
 ```
@@ -78,7 +81,7 @@ This is the final website that we want to publish, but not in this way.
 Add `site/` to `.gitignore`, so that we can build locally with `mkdocs build` to test things but avoid having the generated files in git.  
 We can test it by running `git status` and see that the generated files in the folder `site/` do not appear. You should see only `docs/` and `mkdocs.yml`
 
-![.gitignore](docs/../../images/2022-02-19-Github_pages_website_tutorial-Gitignore_output.jpg)
+![.gitignore](docs/../../images/2022-02-19-Github_pages_website_tutorial/2022-02-19-Github_pages_website_tutorial-Gitignore_output.jpg)
 
 Create the folder `.github/workflows` and add file `build_site.yml` with following code ([from https://github.com/marketplace/actions/deploy-mkdocs](https://squidfunk.github.io/mkdocs-material/publishing-your-site/#github-pages)):
 ```yaml
@@ -115,13 +118,16 @@ Check the progress of the pipeline on the repo website under `Actions`.
 
 To publish the generated website, go on the GitHub website of the repo, go to `Settings->Pages` and select the branch `gh-pages` as the source.  
 The website will be visible at the address `https://{git username}.github.io/`.  
-For example, in my case it's https://stawo.github.io/.
+For example, in my case it's <https://stawo.github.io/>.
+
+![.gitignore](docs/../../images/2022-02-19-Github_pages_website_tutorial/2022-02-19-Github_pages_website_tutorial-Select_branch.jpg)
 
 **Note**: it takes a little bit of time for GitHub to pick up changes, so don't worry if you get an error, just retry to refresh the page.
 
 ### Resources
-- https://squidfunk.github.io/mkdocs-material
-- https://squidfunk.github.io/mkdocs-material/publishing-your-site/#github-pages
+
+- <https://squidfunk.github.io/mkdocs-material>
+- <https://squidfunk.github.io/mkdocs-material/publishing-your-site/#github-pages>
 
 ## Power-up: Blog!
 
@@ -147,7 +153,7 @@ plugins:
       - articles
 ```
 
-**Note**: we added `- search` as we need to re-enable the search bar (see https://squidfunk.github.io/mkdocs-material/setup/setting-up-site-search/#built-in-search)
+**Note**: we added `- search` as we need to re-enable the search bar (see <https://squidfunk.github.io/mkdocs-material/setup/setting-up-site-search/#built-in-search>)
 
 We also have to modify `build_site.yml` like this:
 
