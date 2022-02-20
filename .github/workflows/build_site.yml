@@ -20,9 +20,9 @@ jobs:
           python-version: 3.x
       
       - name: Install libraries
-      - run: pip install \
+        run: pip install \
           mkdocs-material \
           mkdocs-blogging-plugin
       
       - name: Generate docs
-      - run: mkdocs gh-deploy --force
+        run: mkdocs gh-deploy --force
