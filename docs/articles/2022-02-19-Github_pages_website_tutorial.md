@@ -39,7 +39,6 @@ For example, in my case it's `stawo.github.io`.
 From the web interface, create the file `.gitignore`, just add a space in it (otherwise you cannot save it), and commit it.  
 This step is useful to initiate the repo and avoid having to do it locally on the computer later on.
 
-
 (optional, but strongly suggested) Create conda env with `mkdocs` installed and activate it:
 ```
 conda create --name stawo.github.io python=3.10 mkdocs-material
