@@ -520,7 +520,7 @@ if results['exit_value'] &lt; 0:
 <p>Just in case you were thinking of it, do not use the Pandas function <code>read_sql()</code> to execute the stored procedure.
 This function, as the name implies (duh!), is designed to only read data, and does not commit any changes the stored procedure might perform.</p>
 <pre><code class="language-python"># DON'T DO THIS
-pandas.read_sql(sql_query, self.__engine)
+pandas.read_sql(sql_query, engine)
 </code></pre>
 <p>Ok, that's all, have fun!</p>
 <h2 id="resources">Resources</h2>
