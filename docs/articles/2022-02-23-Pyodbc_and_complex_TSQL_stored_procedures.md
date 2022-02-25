@@ -9,23 +9,23 @@ tags:
   - microsoft sql server
 ---
 
-## Introduction
-
 Assume you have a database that you want to manage via a Python program, but for certain operations over your tables (e.g., data updates), you need to execute a complex stored procedure.  
 With complex I mean a stored procedure that might contain multiple statements like `INSERT`, `UPDATE`, and `DELETE`, possibly using variables and temporary tables too.
 
 What I want:
-- be able to call the stored procedure from my Python script;
-- catch if any error happens during the execution of the stored procedure and details of it;
-- capture some sort of log from the execution of the stored procedure (imagine if we could have something like `logger.info()` in the SQL code).
+
+* be able to call the stored procedure from my Python script;
+* catch if any error happens during the execution of the stored procedure and details of it;
+* capture some sort of log from the execution of the stored procedure (imagine if we could have something like `logger.info()` in the SQL code).
 
 I must say that I banged my head more than I would have liked to get all of that using PyODBC and stored procedure over a MS SQL Server.  
 PyODBC seems pretty picky of what can happen in the stored procedure when calling it.
 
 Briefly, to make it work, the stored procedure:
-- cannot contain `PRINT` and `RAISEERROR` statements;
-- must declare `SET NOCOUNT ON` at the beginning of the procedure;
-- can contain only 1 `SELECT` statement (if you use the `TRY...CATCH` statements, you can put 1 `SELECT` in each block).
+
+* cannot contain `PRINT` and `RAISEERROR` statements;
+* must declare `SET NOCOUNT ON` at the beginning of the procedure;
+* can contain only 1 `SELECT` statement (if you use the `TRY...CATCH` statements, you can put 1 `SELECT` in each block).
 
 And here is the SQL template that I created:
 ```sql
@@ -160,5 +160,5 @@ Ok, that's all, have fun!
 
 ## Resources
 
-- <https://www.sqlservertutorial.net/sql-server-stored-procedures/stored-procedure-output-parameters/>
-- <https://docs.microsoft.com/en-us/sql/t-sql/language-elements/try-catch-transact-sql?view=sql-server-ver15>
+* <https://www.sqlservertutorial.net/sql-server-stored-procedures/stored-procedure-output-parameters/>
+* <https://docs.microsoft.com/en-us/sql/t-sql/language-elements/try-catch-transact-sql?view=sql-server-ver15>
