@@ -150,7 +150,7 @@ This function, as the name implies (duh!), is designed to only read data, and do
 
 ```python
 # DON'T DO THIS
-pandas.read_sql(sql_query, self.__engine)
+pandas.read_sql(sql_query, engine)
 ```
 
 Ok, that's all, have fun!
