@@ -97,6 +97,9 @@ In your Python code, we will call the stored procedure using the following templ
 ```python
 import sqlalchemy
 
+sp_name = "stored procedure name"
+prefix = "dbo"
+
 parameters = [
     input1 value,
     ...,
