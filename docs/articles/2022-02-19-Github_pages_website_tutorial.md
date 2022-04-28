@@ -1,9 +1,10 @@
 ---
-title: My lazy Dev dream for publishing!
-description: my_site = {"GitHub Pages", "MkDocs Material", "GitHub Actions"}
+title: BAAC - Blog as a Code
+description: My lazy Dev dream for publishing thanks to GitHub Pages, MkDocs, and GitHub Actions.
 tags:
   - blog
   - mkdocs
+  - github
 ---
 
 ## Introduction
