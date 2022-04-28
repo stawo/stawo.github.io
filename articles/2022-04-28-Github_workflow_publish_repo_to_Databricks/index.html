@@ -6,18 +6,16 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="How to properly write complex TSQL stored procedures that play nice with PyODBC (via SQLAlchemy).">
       
       
-      
-        <link rel="canonical" href="https://stawo.github.io/articles/2022-02-23-Pyodbc_and_complex_TSQL_stored_procedures/">
+        <link rel="canonical" href="https://stawo.github.io/articles/2022-04-28-Github_workflow_publish_repo_to_Databricks/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.11">
     
     
       
-        <title>Complex TSQL stored procedures and PyODBC - Dev Shards</title>
+        <title>Github workflow to publish a repo to a Databricks workspace - Dev Shards</title>
       
     
     
@@ -62,11 +60,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#resources" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -98,7 +91,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Complex TSQL stored procedures and PyODBC
+              Github workflow to publish a repo to a Databricks workspace
             
           </span>
         </div>
@@ -280,48 +273,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Complex TSQL stored procedures and PyODBC
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../2022-02-23-Pyodbc_and_complex_TSQL_stored_procedures/" class="md-nav__link">
         Complex TSQL stored procedures and PyODBC
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#resources" class="md-nav__link">
-    Resources
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -331,11 +287,19 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../2022-04-28-Github_workflow_publish_repo_to_Databricks/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Github workflow to publish a repo to a Databricks workspace
       </a>
+      
     </li>
   
 
@@ -365,21 +329,6 @@
   
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#resources" class="md-nav__link">
-    Resources
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -392,149 +341,153 @@
                 
 
 
-  <h1>Complex TSQL stored procedures and PyODBC</h1>
+  <h1>Github workflow to publish a repo to a Databricks workspace</h1>
 
-<p>Assume you have a database that you want to manage via a Python program, but for certain operations over your tables (e.g., data updates), you need to execute a complex stored procedure.<br />
-With complex I mean a stored procedure that might contain multiple statements like <code>INSERT</code>, <code>UPDATE</code>, and <code>DELETE</code>, possibly using variables and temporary tables too.</p>
-<p>What I want:</p>
-<ul>
-<li>be able to call the stored procedure from my Python script;</li>
-<li>catch if any error happens during the execution of the stored procedure and details of it;</li>
-<li>capture some sort of log from the execution of the stored procedure (imagine if we could have something like <code>logger.info()</code> in the SQL code).</li>
-</ul>
-<p>I must say that I banged my head more than I would have liked to get all of that using PyODBC and stored procedure over a MS SQL Server.<br />
-PyODBC seems pretty picky of what can happen in the stored procedure when calling it.</p>
-<p>Briefly, to make it work, the stored procedure:</p>
-<ul>
-<li>cannot contain <code>PRINT</code> and <code>RAISEERROR</code> statements;</li>
-<li>must declare <code>SET NOCOUNT ON</code> at the beginning of the procedure;</li>
-<li>can contain only 1 <code>SELECT</code> statement (if you use the <code>TRY...CATCH</code> statements, you can put 1 <code>SELECT</code> in each block).</li>
-</ul>
-<p>And here is the SQL template that I created:</p>
-<pre><code class="language-sql">CREATE PROCEDURE [stored procedure name]
-    -- INPUT PARAMETERS
-    @input1 type,
-    ...
-    @inputN type,
-    -- OUTPUT PARAMETERS - DO NOT MODIFY
-    @sp_exit_value int OUTPUT,
-    @sp_log nvarchar(max) OUTPUT,
-    @sp_error nvarchar(max) OUTPUT
-AS
-BEGIN TRY
+<p>Here is a quick code snippet of a Github workflow that publishes (or updates, if it already exists) a repository to a Databricks workspace.</p>
+<p>I assume you already configured your repository provider in the Databricks workspace: <a href="https://docs.databricks.com/repos/index.html">https://docs.databricks.com/repos/index.html</a></p>
+<pre><code class="language-yaml"># ------------------------------------------------------------
+# GITHUB WORKFLOW TO PUBLISH/UPDATE A GIT REPO IN DATABRICKS WORKSPACE
+# 
+# In this workflow we publish a new repo or update an existing one
+# in a given Databricks workspace.
+# The workflow also allows to set 2 environments:
+# - production
+# - development
+# The two environments can point to two different DB workspaces
+# The workflow is triggered by commits and, depending on the branch,
+# it uses one of the two environments.
+# More specifically, the branch name defined in the var
+# `PROD_BRANCH_NAME` dictates which branch is considered as production.
+# 
+# We assume the following secrets are defined:
+# - DATABRICKS_HOST_PROD : Production workspace url
+# - DATABRICKS_TOKEN_PROD : Token to access the production workspace
+# - DATABRICKS_HOST_DEV : Development workspace url
+# - DATABRICKS_TOKEN_DEV : Token to access the development workspace
+# ------------------------------------------------------------
 
-    -- MUST SET NOCOUNT ON
-    -- Without it, the call from python will fail
-    SET NOCOUNT ON;
+name: Databricks
 
-    declare @message nvarchar(max);
+# NOTE: a succesfull PR (i.e. that is approved and merged), generates
+# a commit on the target branch, so we don't need to specify `pull_request`
+on:
+  push:
+    # branches:
+    #   - main
 
-    -- NCHAR(13)+NCHAR(10) represents a new line
-    -- https://stackoverflow.com/questions/53115490/how-to-correctly-insert-newline-in-nvarchar
-    set @message = concat(@message,NCHAR(13)+NCHAR(10),'Start');
+env:
+  # Name of the branch that represents the production code
+  # Usually it's `main` or `master`
+  PROD_BRANCH_NAME: main
+  # Path in the Databricks workspace where to store the repo
+  DATABRICKS_REPO_PATH: &quot;/Repos/folder/name&quot;
+  # Repo url
+  DATABRICKS_REPO_URL: https://github.com/repo_url
+  # See https://docs.databricks.com/dev-tools/cli/repos-cli.html#create-a-repo
+  DATABRICKS_REPO_PROVIDER: gitHub
 
-    ----------------------------------------------------------------
+jobs:
+  databricks:
 
-    -- YOUR CODE HERE
+    runs-on: ubuntu-latest
 
-    ----------------------------------------------------------------
+    steps:
 
-    -- Output
+      # ---------------------------------------
+      # SET ENV VARS FOR DIFFERENT ENVIRONMENTS
+      # We select the values for `host` and `token` depending on the branch.
+      # If we are in `main` (or the value set in `PROD_BRANCH_NAME`), then we
+      # retrieve the production values, otherwise we take the development ones.
+      # This is achieved using the two conditional steps below.
+      # As an example, in the condition
+      # `${{ github.ref_name == env.PROD_BRANCH_NAME }}`
+      # `github.ref_name` might have the `development` if we performed a commit in that branch.
+      # https://docs.github.com/en/actions/learn-github-actions/contexts#github-context
 
-    set @message = concat(@message,NCHAR(13)+NCHAR(10),'End');
+      - name: Sets env vars for Production
+        if: ${{ github.ref_name == env.PROD_BRANCH_NAME }}
+        run: |
+          echo &quot;DATABRICKS_HOST=${{ secrets.DATABRICKS_HOST_PROD }}&quot; &gt;&gt; $GITHUB_ENV
+          echo &quot;DATABRICKS_TOKEN=${{ secrets.DATABRICKS_TOKEN_PROD }}&quot; &gt;&gt; $GITHUB_ENV
 
-    SELECT
-        @sp_exit_value = 0,
-        @sp_log = @message,
-        @sp_error = Null
-        ;
+      - name: Sets env vars for Development
+        if: ${{ github.ref_name != env.PROD_BRANCH_NAME }}
+        run: |
+          echo &quot;DATABRICKS_HOST=${{ secrets.DATABRICKS_HOST_DEV }}&quot; &gt;&gt; $GITHUB_ENV
+          echo &quot;DATABRICKS_TOKEN=${{ secrets.DATABRICKS_TOKEN_DEV }}&quot; &gt;&gt; $GITHUB_ENV
 
-END TRY
-BEGIN CATCH  
+      # ---------------------------------------
+      # INSTALL DATABRICKS-CLI AND CONFIGURE IT
 
-    SELECT
-        @sp_exit_value = -1,
-        @sp_log = @message,
-        @sp_error = concat(
-            'ERROR_NUMBER: ', ERROR_NUMBER(),
-            NCHAR(13)+NCHAR(10),'ERROR_SEVERITY: ', ERROR_SEVERITY(),
-            NCHAR(13)+NCHAR(10),'ERROR_STATE: ', ERROR_STATE(),
-            NCHAR(13)+NCHAR(10),'ERROR_PROCEDURE: ', ERROR_PROCEDURE(),
-            NCHAR(13)+NCHAR(10),'ERROR_LINE: ', ERROR_LINE(),
-            NCHAR(13)+NCHAR(10),'ERROR_MESSAGE: ', ERROR_MESSAGE()
-        )
-        ;
-END CATCH;
+      - name: Install databricks-cli
+        run: python -m pip install databricks-cli
+        shell: bash
+
+      - name: Set `.databrickscfg`
+        run: | 
+          cat &gt; ~/.databrickscfg &lt;&lt;EOF 
+          [DEFAULT] 
+          host = ${{ env.DATABRICKS_HOST }}
+          token = ${{ env.DATABRICKS_TOKEN }}
+          EOF
+
+      # ---------------------------------------
+      # TEST DATABRICKS-CLI
+
+      - name: List all repos
+        run: databricks repos list
+
+      # ---------------------------------------
+      # PUBLISH SELECTED REPO
+      #
+      # Code breakdown:
+      # - ERR=0
+      #   We initialize the var `ERR` to 0. This var represents if the
+      #   following command executes successfully (0) or not (1)
+      # - `databricks repos get --path ${{ env.DATABRICKS_REPO_PATH }}`
+      #   Tries to get details about repo with path `DATABRICKS_REPO_PATH`.
+      #   If it does not exist, it fails with exist status -1.
+      # - ... || ERR=1
+      #   this part is executed if the previous command fails, in which
+      #   case we assign 1 to ERR
+      #   https://stackoverflow.com/questions/65754507/bash-pipe-get-the-exit-status-of-previous-process-in-pipeline
+      # - `if [...]; then ...; else ...; fi`
+      #   if-then-else statement, https://www.geeksforgeeks.org/bash-scripting-if-statement/
+      # - `ERR -eq 0`
+      #   Checks if `ERR` is equal to 0
+      # - `echo &quot;::set-output name=repo_exists::1&quot;`
+      #   Add to the outputs of the step the output `repo_exists` with value 1
+      - name: Check for repo existence
+        id: check_repo_existence
+        run: |
+          ERR=0
+          databricks repos get --path ${{ env.DATABRICKS_REPO_PATH }} || ERR=1
+          if [ $ERR -eq 0 ]; then echo &quot;Repo exists&quot;; else echo &quot;Repo does not exist&quot;; fi
+          if [ $ERR -eq 0 ]; then echo &quot;::set-output name=repo_exists::1&quot;; else echo &quot;::set-output name=repo_exists::0&quot;; fi
+
+      # Check if the step `check_repo_existence` output `` is 0,
+      # meaning that the repo `DATABRICKS_REPO_PATH` does not exist
+      # https://docs.github.com/en/actions/learn-github-actions/contexts#steps-context
+      # In that case, we create the repository and switch to the branch
+      # that triggered this workflow.
+      # We use `${{ github.ref_name }}` to get the name of the branch
+      # https://docs.github.com/en/actions/learn-github-actions/contexts#github-context
+      - name: Repo does not exist, create it
+        if: steps.check_repo_existence.outputs.repo_exists == 0
+        run: |
+          echo &quot;Repo does not exist!&quot;
+          databricks repos create --url ${{ env.DATABRICKS_REPO_URL }} --provider ${{ env.DATABRICKS_REPO_PROVIDER }} --path ${{ env.DATABRICKS_REPO_PATH }}
+          databricks repos update --path ${{ env.DATABRICKS_REPO_PATH }} --branch ${{ github.ref_name }}
+
+      # If the repo already exists, we update it.
+      # We use `${{ github.ref_name }}` to get the name of the branch
+      # https://docs.github.com/en/actions/learn-github-actions/contexts#github-context
+      - name: Repo exists, update it
+        if: steps.check_repo_existence.outputs.repo_exists == 1
+        run: |
+          echo &quot;Repo exists!&quot;
+          databricks repos update --path ${{ env.DATABRICKS_REPO_PATH }} --branch ${{ github.ref_name }}
 </code></pre>
-<p>You can modify the template above to fit your needs.<br />
-In particulat, note the command:</p>
-<pre><code class="language-sql">set @message = concat(@message,NCHAR(13)+NCHAR(10),'YOUR TEXT');
-</code></pre>
-<p>That forms the logging functionality of the stored procedure.</p>
-<p>In your Python code, we will call the stored procedure using the following template:</p>
-<pre><code class="language-python">import sqlalchemy
-
-sp_name = &quot;stored procedure name&quot;
-prefix = &quot;dbo&quot;
-
-parameters = [
-    input1 value,
-    ...,
-    inputN value,
-]
-
-# This part is needed as parameters needs to be escaped
-# based on their type to be properly passed in the SQL
-# command EXEC
-escaped_parameters = []
-    for parameter in parameters:
-        if isinstance(parameter, (int, float)):
-            escaped_parameters.append(str(parameter))
-        elif isinstance(parameter, bool):
-            escaped_parameters.append(&quot;1&quot; if parameter else &quot;0&quot;)
-        else:
-            escaped_parameters.append(f&quot;'{str(parameter)}'&quot;)
-
-sql_query = f&quot;&quot;&quot;\
-DECLARE @exit_value int;
-DECLARE @log nvarchar(max);
-DECLARE @error nvarchar(max);
-        EXEC [{prefix}].[{sp_name}] {', '.join(escaped_parameters)}{',' if len(escaped_parameters)&gt;0 else ''} @sp_exit_value=@exit_value OUTPUT, @sp_log=@log OUTPUT, @sp_error=@error OUTPUT;
-SELECT @exit_value AS exit_value, @log AS log, @error AS error;
-&quot;&quot;&quot;
-
-engine = sqlalchemy.create_engine(&quot;mssql+pyodbc:/// CONNECTION STRING&quot;)
-
-with engine.begin() as connection:
-    sql_results = connection.execute(sql_query)
-
-    if sql_results.returns_rows:
-        # We retrieve the first row of the results (which should be the only row)
-        for row in sql_results:
-            results = {
-                &quot;exit_value&quot;: row[0],
-                &quot;log&quot;: row[1],
-                &quot;error&quot;: row[2],
-            }
-            break
-    else:
-        ValueError(&quot;The stored procedure did not return any row, but it should!&quot;)
-
-if results['exit_value'] &lt; 0:
-    message = f&quot;Failed to execute stored procedure [{sp_name}].\nError:\n{results['error']}\n--------\nLog:\n{results['log']}\n--------&quot;
-    raise ExecError(message)
-</code></pre>
-<p>Just in case you were thinking of it, do not use the Pandas function <code>read_sql()</code> to execute the stored procedure.
-This function, as the name implies (duh!), is designed to only read data, and does not commit any changes the stored procedure might perform.</p>
-<pre><code class="language-python"># DON'T DO THIS
-pandas.read_sql(sql_query, engine)
-</code></pre>
-<p>Ok, that's all, have fun!</p>
-<h2 id="resources">Resources</h2>
-<ul>
-<li><a href="https://www.sqlservertutorial.net/sql-server-stored-procedures/stored-procedure-output-parameters/">https://www.sqlservertutorial.net/sql-server-stored-procedures/stored-procedure-output-parameters/</a></li>
-<li><a href="https://docs.microsoft.com/en-us/sql/t-sql/language-elements/try-catch-transact-sql?view=sql-server-ver15">https://docs.microsoft.com/en-us/sql/t-sql/language-elements/try-catch-transact-sql?view=sql-server-ver15</a></li>
-</ul>
 
               
             </article>
@@ -553,7 +506,7 @@ pandas.read_sql(sql_query, engine)
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../2022-02-19-Github_pages_website_tutorial/" class="md-footer__link md-footer__link--prev" aria-label="Previous: My lazy Dev dream for publishing!" rel="prev">
+        <a href="../2022-02-23-Pyodbc_and_complex_TSQL_stored_procedures/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Complex TSQL stored procedures and PyODBC" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -562,26 +515,11 @@ pandas.read_sql(sql_query, engine)
               <span class="md-footer__direction">
                 Previous
               </span>
-              My lazy Dev dream for publishing!
+              Complex TSQL stored procedures and PyODBC
             </div>
           </div>
         </a>
       
-      
-        
-        <a href="../2022-04-28-Github_workflow_publish_repo_to_Databricks/" class="md-footer__link md-footer__link--next" aria-label="Next: Github workflow to publish a repo to a Databricks workspace" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Github workflow to publish a repo to a Databricks workspace
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
       
     </nav>
   

@@ -2,17 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://stawo.github.io/</loc>
-         <lastmod>2022-02-25</lastmod>
+         <lastmod>2022-04-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stawo.github.io/articles/2022-02-19-Github_pages_website_tutorial/</loc>
-         <lastmod>2022-02-25</lastmod>
+         <lastmod>2022-04-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stawo.github.io/articles/2022-02-23-Pyodbc_and_complex_TSQL_stored_procedures/</loc>
-         <lastmod>2022-02-25</lastmod>
+         <lastmod>2022-04-28</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://stawo.github.io/articles/2022-04-28-Github_workflow_publish_repo_to_Databricks/</loc>
+         <lastmod>2022-04-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
