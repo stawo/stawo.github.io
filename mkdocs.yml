@@ -4,6 +4,9 @@ site_url: https://stawo.github.io/
 
 theme:
   name: material
+  palette:
+    scheme: slate
+    accent: amber
   features:
     - navigation.tabs
     - navigation.tabs.sticky
