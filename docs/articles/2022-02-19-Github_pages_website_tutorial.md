@@ -42,7 +42,7 @@ This step is useful to initiate the repo and avoid having to do it locally on th
 
 (optional, but strongly suggested) Create conda env with `mkdocs` installed and activate it:
 ```
-conda create --name stawo.github.io python=3.10 mkdocs-material
+conda create -c conda-forge --name stawo.github.io python=3.10 mkdocs-material
 conda activate stawo.github.io
 ```
 
